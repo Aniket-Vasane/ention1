@@ -5,6 +5,8 @@ import { SessionProvider } from "next-auth/react";
 import ChatBot from "react-simple-chatbot";
 import { ThemeProvider } from "styled-components";
 import Head from "next/head";
+import Header from "components/layout/header";
+import Footer from "components/layout/footer";
 
 export default function App({
   Component,
@@ -93,15 +95,15 @@ export default function App({
       <Head>
         <meta
           name="viewport"
-          content="width=1280, maximum-scale=5, user-scalable=yes"
+          content="width=device-width, initial-scale=1, maximum-scale=5, user-scalable=yes"
         />
       </Head>
       <div className="App">
         <ToastContainer />
         <SessionProvider>
-          {" "}
-          {/* session={session}  */}
+          <Header />
           <Component {...pageProps} />
+          <Footer />
           <ThemeProvider theme={theme}>
             <ChatBot
               // This appears as the header

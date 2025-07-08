@@ -6,6 +6,8 @@ import { IoMenu } from "react-icons/io5";
 import { GrClose } from "react-icons/gr";
 import { useRouter } from "next/router";
 import { motion } from "framer-motion";
+import { FaShoppingCart, FaUserCircle } from "react-icons/fa";
+import Image from "next/image";
 
 const Header = () => {
   const [isShowModal, setShowModal] = useState(false);
@@ -45,6 +47,26 @@ const Header = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, [lastScrollY]);
 
+  useEffect(() => {
+    if (router && router.prefetch) {
+      router.prefetch("/about");
+      // Optionally prefetch other important pages:
+      // router.prefetch("/ecommerce/product");
+      // router.prefetch("/technical-support");
+    }
+  }, [router]);
+
+  const handleOpenMenu = () => {
+    setShowModal(true);
+    // Prefetch important routes for instant navigation
+    router.prefetch("/");
+    router.prefetch("/ecommerce/product");
+    router.prefetch("/about");
+    router.prefetch("/technical-support");
+    router.prefetch("/login");
+    router.prefetch("/signup");
+  };
+
   return (
     <motion.div
       style={{
@@ -53,51 +75,91 @@ const Header = () => {
       initial={{ y: 0 }}
       animate={{ y: hidden ? "-100%" : "0%" }} // Move up instead of disappearing
       transition={{ duration: 0.3, ease: "easeInOut" }}
-      className="h-20 fixed z-50 w-full flex pl-36 xl:pl-0 justify-start xl:justify-center items-center gap-6 xl:gap-10 min-[1320px]:gap-16 top-0 mb-10"
+      className="h-20 fixed z-50 w-full flex items-center justify-between px-4 lg:px-10 top-0 mb-10"
     >
+      {/* MOBILE HEADER: Only visible on mobile (below lg) */}
+      <div className="flex lg:hidden w-full items-center justify-between">
+        {/* Hamburger menu on left */}
+        <button
+          className="text-white text-3xl"
+          onClick={handleOpenMenu}
+        >
+          <IoMenu />
+        </button>
+        {/* Centered logo */}
+        <Image
+          src={logo}
+          alt="ention-logo-mobile"
+          width={90}
+          height={90}
+          className="w-[90px] h-auto object-contain cursor-pointer"
+          onClick={() => router.push("/")}
+        />
+        {/* Cart icon on right */}
+        <Link href="/ecommerce/cart" className="flex items-center">
+          <FaShoppingCart className="text-white text-2xl hover:text-[#01E9FE] transition" />
+        </Link>
+      </div>
+
+      {/* DESKTOP HEADER: Only visible on lg and above */}
+      <div className="hidden lg:flex w-full items-center justify-center gap-6 xl:gap-10 min-[1320px]:gap-10 mr-[90px] ">
+        <Link
+          href="/collaborate"
+          className="font-semibold text-xl text-white hover:underline underline-offset-8 decoration-[#007E9E] decoration-4"
+        >
+          Collaborate
+        </Link>
+        <Link
+          href="/"
+          className="font-semibold text-xl text-white hover:underline underline-offset-8 decoration-[#007E9E] decoration-4"
+        >
+          Home
+        </Link>
+        <Link
+          href="/ecommerce/product"
+          className="font-semibold text-xl text-white hover:underline underline-offset-8 decoration-[#007E9E] decoration-4"
+        >
+          Products
+        </Link>
+        <Image
+          src={logo}
+          alt="ention-logo-desktop"
+          width={90}
+          height={90}
+          className="object-contain cursor-pointer"
+          onClick={() => router.push("/")}
+        />
+        <Link
+          href="/about"
+          className="font-semibold text-xl text-white hover:underline underline-offset-8 decoration-[#007E9E] decoration-4"
+        >
+          About Us
+        </Link>
+        <Link
+          href="/technical-support"
+          className="font-semibold text-xl text-white hover:underline underline-offset-8 decoration-[#007E9E] decoration-4"
+        >
+          Support
+        </Link>
+        
+        <Link href="/ecommerce/cart" className="flex items-center">
+          <FaShoppingCart className="text-white text-2xl hover:text-[#01E9FE] transition" />
+        </Link>
+       
+      </div>
+
+      {/* Dashboard nav link absolute left (desktop only) */}
       <Link
-        href="/"
-        className="hidden lg:block font-semibold text-xl text-white hover:underline underline-offset-8 decoration-[#007E9E] decoration-4"
+        href="/dashboard"
+        className="hidden lg:block absolute left-10 text-white hover:text-[#01E9FE] transition"
+        style={{ zIndex: 60 }}
+        title="Dashboard"
       >
-        Home
+        <FaUserCircle className="text-3xl" />
       </Link>
-      <Link
-        href="/product"
-        className="hidden lg:block font-semibold text-xl text-white hover:underline underline-offset-8 decoration-[#007E9E] decoration-4"
-      >
-        Products
-      </Link>
-      <Link
-        href="/service/start-a-business?category=sole-proprietorship"
-        className="hidden lg:block font-semibold text-xl text-white hover:underline underline-offset-8 decoration-[#007E9E] decoration-4"
-      >
-        Service
-      </Link>
-      <img
-        src={logo.src}
-        alt="ention-logo"
-        className="w-[90px] h-auto object-none absolute left-10 min-[1420px]:static cursor-pointer"
-        onClick={() => router.push("/")}
-      />
-      <Link
-        href="/about"
-        className="hidden lg:block font-semibold text-xl text-white hover:underline underline-offset-8 decoration-[#007E9E] decoration-4"
-      >
-        About Us
-      </Link>
-      <Link
-        href="/technical-support"
-        className="hidden lg:block font-semibold text-xl text-white hover:underline underline-offset-8 decoration-[#007E9E] decoration-4"
-      >
-        Support
-      </Link>
-      <Link
-        href="/career"
-        className="hidden lg:block font-semibold text-xl text-white hover:underline underline-offset-8 decoration-[#007E9E] decoration-4"
-      >
-        Career
-      </Link>
-      <div className="absolute hidden lg:flex items-center gap-2 right-10 ">
+
+      {/* Desktop auth buttons - positioned absolutely on right */}
+      <div className="absolute hidden lg:flex items-center gap-2 right-10">
         <Link
           href={{
             pathname: "/login",
@@ -116,104 +178,71 @@ const Header = () => {
           </button>
         </Link>
       </div>
-      <button
-        className="absolute right-10 text-white text-3xl"
-        onClick={() => setShowModal(true)}
-      >
-        <IoMenu />
-      </button>
+
       {isShowModal ? (
         <>
-          <div className="w-full h-full justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none">
-            <div className="relative w-full h-full  max-w-full">
-              {/*content*/}
-              <div
-                className="h-full border-0 shadow-lg relative flex flex-col w-full  outline-none focus:outline-none"
-                style={{ backgroundColor: "#0FAFCA" }}
+          {/* Overlay background */}
+          <div
+            className="fixed inset-0 z-40 bg-black bg-opacity-40 lg:hidden"
+            onClick={() => setShowModal(false)}
+          ></div>
+          {/* Side drawer */}
+          <div className="fixed left-0 top-0 h-full min-h-screen w-[80vw] max-w-[340px] bg-white z-50 flex flex-col shadow-2xl rounded-r-2xl border-r border-gray-200 overflow-y-auto transition-all duration-300 ease-in-out lg:hidden">
+            {/* Header with logo and close button */}
+            <div className="flex items-center justify-between px-4 py-4 border-b border-gray-100">
+              <Image
+                src={logo}
+                alt="ention-logo"
+                width={60}
+                height={40}
+                className="w-[60px] h-auto object-contain cursor-pointer text-black" style={{color: "black"}}
+                onClick={() => { setShowModal(false); router.push("/"); }}
+              />
+              <button
+                className="text-2xl text-gray-700 p-2 rounded-full hover:bg-gray-100 focus:outline-none"
+                onClick={() => setShowModal(false)}
+                aria-label="Close menu"
               >
-                <div className="flex items-start justify-between p-5 ">
-                  <img
-                    src={logo.src}
-                    alt="ention-logo"
-                    className=" w-[90px] h-auto object-none "
-                  />
-                  <button
-                    className="p-1 mr-5 mt-5 bg-transparent border-0 text-gray-700 float-right text-3xl leading-none font-semibold outline-none focus:outline-none"
-                    onClick={() => setShowModal(false)}
-                  >
-                    <GrClose />
-                  </button>
-                </div>
-                <div className="absolute flex items-center gap-2 right-10 top-32 ">
-                  <button
-                    className="w-28 h-10 bg-transparent border rounded-3xl border-white flex center text-white text-lg hover:scale-105  transition-all duration-300 ease-in-out"
-                    onClick={() =>
-                      router.push(
-                        `/login?${pathname}?${searchParams?.toString()}`
-                      )
-                    }
-                  >
-                    Login
-                  </button>
-                  <button
-                    className="w-32 h-10 bg-white border rounded-3xl border-white flex center text-black text-lg hover:scale-105  transition-all duration-300 ease-in-out"
-                    onClick={() => router.push("/signup")}
-                  >
-                    Register
-                  </button>
-                </div>
-                <div className="flex flex-col items-center gap-5 mt-16">
-                  <button
-                    className="z-[2] w-[220px] h-[48px] rounded-3xl flex justify-center items-center text-black text-2xl hover:scale-105  transition-all duration-300 ease-in-out"
-                    style={{ backgroundColor: "#fff" }}
-                    onClick={() => router.push("/")}
-                  >
-                    Home
-                  </button>
-                  <button
-                    className="z-[2] w-[220px] h-[48px] rounded-3xl flex justify-center items-center text-black text-2xl hover:scale-105  transition-all duration-300 ease-in-out"
-                    style={{ backgroundColor: "#fff" }}
-                    onClick={() => router.push("/product")}
-                  >
-                    Products
-                  </button>
-                  <button
-                    className="z-[2] w-[220px] h-[48px] rounded-3xl flex justify-center items-center text-black text-2xl hover:scale-105  transition-all duration-300 ease-in-out"
-                    style={{ backgroundColor: "#fff" }}
-                    onClick={() =>
-                      router.push(
-                        "/service/start-a-business?category=sole-proprietorship"
-                      )
-                    }
-                  >
-                    Service
-                  </button>
-                  <button
-                    className="z-[2] w-[220px] h-[48px] rounded-3xl flex justify-center items-center text-black text-2xl hover:scale-105  transition-all duration-300 ease-in-out"
-                    style={{ backgroundColor: "#fff" }}
-                    onClick={() => router.push("/about")}
-                  >
-                    About Us
-                  </button>
-                  <button
-                    className="z-[2] w-[220px] h-[48px] rounded-3xl flex justify-center items-center text-black text-2xl hover:scale-105  transition-all duration-300 ease-in-out"
-                    style={{ backgroundColor: "#fff" }}
-                    onClick={() => router.push("/technical-support")}
-                  >
-                    Support
-                  </button>
-                  <button
-                    className="z-[2] w-[220px] h-[48px] rounded-3xl flex justify-center items-center text-black text-2xl hover:scale-105  transition-all duration-300 ease-in-out"
-                    style={{ backgroundColor: "#fff" }}
-                    onClick={() => router.push("/career")}
-                  >
-                    Career
-                  </button>
-                </div>
-              </div>
+                <GrClose />
+              </button>
+            </div>
+            {/* Navigation links */}
+            <nav className="flex flex-col gap-1 flex-1 px-4 py-2 mt-2">
+              <Link href="/collaborate" passHref legacyBehavior>
+                <a className="text-gray-900 text-base font-semibold text-left py-3 px-2 rounded hover:bg-gray-100 transition" onClick={() => setShowModal(false)}>Collaborate</a>
+              </Link>
+              <Link href="/" passHref legacyBehavior>
+                <a className="text-gray-900 text-base font-semibold text-left py-3 px-2 rounded hover:bg-gray-100 transition" onClick={() => setShowModal(false)}>Home</a>
+              </Link>
+              <Link href="/ecommerce/product" passHref legacyBehavior>
+                <a className="text-gray-900 text-base font-semibold text-left py-3 px-2 rounded hover:bg-gray-100 transition" onClick={() => setShowModal(false)}>Products</a>
+              </Link>
+              <Link href="/about" passHref legacyBehavior>
+                <a className="text-gray-900 text-base font-semibold text-left py-3 px-2 rounded hover:bg-gray-100 transition" onClick={() => setShowModal(false)}>About Us</a>
+              </Link>
+              <Link href="/technical-support" passHref legacyBehavior>
+                <a className="text-gray-900 text-base font-semibold text-left py-3 px-2 rounded hover:bg-gray-100 transition" onClick={() => setShowModal(false)}>Support</a>
+              </Link>
+              <Link href="/dashboard" passHref legacyBehavior>
+                <a className="text-gray-900 text-base font-semibold text-left py-3 px-2 rounded hover:bg-gray-100 transition" onClick={() => setShowModal(false)}>Dashboard</a>
+              </Link>
+            </nav>
+            {/* Auth buttons at bottom */}
+            <div className="flex flex-col gap-2 px-4 pb-6 mb-8">
+              <button
+                className="w-full border border-black text-black rounded-3xl py-2 font-semibold text-base hover:bg-gray-100 transition"
+                onClick={() => { setShowModal(false); router.push("/login"); }}
+              >
+                Login
+              </button>
+              <button
+                className="w-full bg-black text-white rounded-3xl py-2 font-semibold text-base hover:bg-gray-900 transition"
+                onClick={() => { setShowModal(false); router.push("/signup"); }}
+              >
+                Register
+              </button>
             </div>
           </div>
-          <div className="opacity-25 fixed inset-0 z-40 bg-black"></div>
         </>
       ) : null}
     </motion.div>
@@ -235,11 +264,11 @@ const Header = () => {
 //                 {/*body*/}
 //                 <div className="relative p-6 flex-auto">
 //                   <p className="my-4 text-blueGray-500 text-lg leading-relaxed">
-//                     I always felt like I could do anything. That’s the main
+//                     I always felt like I could do anything. That's the main
 //                     thing people are controlled by! Thoughts- their perception
 //                     of themselves! They're slowed down by their perception of
-//                     themselves. If you're taught you can’t do anything, you
-//                     won’t do anything. I was taught I could do everything.
+//                     themselves. If you're taught you can't do anything, you
+//                     won't do anything. I was taught I could do everything.
 //                   </p>
 //                 </div>
 //                 {/*footer*/}

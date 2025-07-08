@@ -1,0 +1,39 @@
+[
+  {
+    "title": "For Investors",
+    "description": "Join us in revolutionizing the tech industry! Partner with ENTION to bring cutting-edge laptops to the market.",
+    "features": [
+      "High ROI potential",
+      "Sustainable and future-ready tech",
+      "Transparent collaboration",
+      "Comprehensive Business Plans"
+    ]
+  },
+  {
+    "title": "For Dealers",
+    "description": "Become a trusted partner in delivering our cutting-edge products to customers nationwide.",
+    "features": [
+      "Exclusive Dealer Discounts",
+      "Priority Stock Availability",
+      "Marketing & Sales Support"
+    ]
+  },
+  {
+    "title": "For Service Providers",
+    "description": "Collaborate with us to offer exceptional after-sales service and technical support.",
+    "features": [
+      "Access to repair kits and spare parts",
+      "Regular training programs",
+      "Performance-based incentives"
+    ]
+  },
+  {
+    "title": "For Universities",
+    "description": "Transform education with customized laptops and bulk order discounts.",
+    "features": [
+      "Affordable bulk pricing",
+      "Custom configurations for academic needs",
+      "Warranty and on-campus tech support"
+    ]
+  }
+]

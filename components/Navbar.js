@@ -633,12 +633,12 @@ const Navbar = () => {
             Vision
           </Link>
           <div className="relative group">
-            <h2
-              href="/products/laptops"
+            <Link
+              href="/ecommerce/product"
               className="mr-5 group-hover:text-white group-hover:underline underline-offset-8 decoration-[#007E9E] decoration-4 font-semibold cursor-pointer"
             >
               Product
-            </h2>
+            </Link>
             <div
               className="absolute top-10 transform -translate-x-1/2 left-1 group-hover:block hidden "
               style={{ zIndex: 999999 }}

@@ -1,4 +1,4 @@
-import { Navbar, Footer } from 'components';
+
 import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -111,7 +111,7 @@ const IconWrapper = ({ icon: Icon, size = 24 }) => <Icon size={size} />;
 export default function TechnicalSupport() {
   return (
     <main className="bg-[#070D2A] min-h-screen">
-      <Navbar />
+      
       {/* Header Section */}
       <header className="text-center py-20">
         <h1 className="text-4xl md:text-5xl font-extrabold text-white mb-3">Ention Support</h1>
@@ -128,7 +128,7 @@ export default function TechnicalSupport() {
 
       {/* Quick Support Options */}
       <section className="py-12 w-full">
-        <h2 className="text-center text-2xl font-extrabold mb-10 text-gray-900">Quick Support Options</h2>
+        <h2 className="text-center text-2xl font-extrabold underline underline-offset-8 mb-10 text-white ">Quick Support Options</h2>
         <div className="flex flex-wrap justify-center gap-8 mb-8">
           {/* Card 1 */}
           <div className="bg-white rounded-2xl shadow-md flex flex-col items-center w-72 max-w-xs p-0">
@@ -179,7 +179,7 @@ export default function TechnicalSupport() {
 
       {/* Support Downloads & Resources */}
       <section className="py-12 w-full">
-        <h2 className="text-center text-2xl font-extrabold mb-10 text-gray-900">Support Downloads & Resources</h2>
+        <h2 className="text-center text-2xl font-extrabold underline underline-offset-8  mb-10 text-white">Support Downloads & Resources</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
           {resourceLinks.map(link => (
             <a href={link.href} key={link.title} tabIndex={0} aria-label={link.title} className="bg-white rounded-xl shadow-md p-8 flex flex-col hover:shadow-lg transition-all cursor-pointer">
@@ -192,7 +192,7 @@ export default function TechnicalSupport() {
 
       {/* Browse Support by Category */}
       <section className="py-12 w-full">
-        <h2 className="text-center text-2xl font-extrabold mb-10 text-gray-900">Browse Support by Category</h2>
+        <h2 className="text-center text-2xl font-extrabold underline underline-offset-8  mb-10 text-white">Browse Support by Category</h2>
         <div className="flex flex-wrap justify-center gap-8 mb-8">
           {categoryData.map((cat) => (
             <div key={cat.key} className="bg-white rounded-xl shadow-md p-8 min-w-[240px] max-w-xs flex-1 flex flex-col">
@@ -214,9 +214,9 @@ export default function TechnicalSupport() {
       </section>
 
       {/* Find Your Product */}
-      <section className="py-12 w-full bg-gray-50">
-        <h3 className="text-center text-xl font-extrabold mb-2 text-gray-900">Find Your Product</h3>
-        <p className="text-center text-gray-700 mb-6">Enter your service tag or product model to get personalized support</p>
+      <section className="py-12 w-full">
+        <h3 className="text-center text-xl font-extrabold underline underline-offset-8 mb-2 text-white">Find Your Product</h3>
+        <p className="text-center text-white mb-6">Enter your service tag or product model to get personalized support</p>
         <form className="flex flex-col items-center gap-3 bg-white rounded-xl shadow-md p-8 max-w-md mx-auto">
           <input className="w-full border border-gray-200 rounded-md py-3 px-4 text-base" placeholder="e.g., ENTION-XPS-13-2024" aria-label="Service Tag or Product Model" />
           <button type="submit" className="w-full bg-gray-900 text-white font-bold py-3 rounded-md hover:bg-black transition">Find My Product</button>
@@ -226,7 +226,7 @@ export default function TechnicalSupport() {
 
       {/* Popular Support Articles */}
       <section className="py-12 w-full">
-        <h2 className="text-center text-2xl font-extrabold mb-10 text-gray-900">Popular Support Articles</h2>
+        <h2 className="text-center text-2xl font-extrabold underline underline-offset-8  mb-10 text-white">Popular Support Articles</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
           {articleData.map((a, i) => (
             <div key={i} className="bg-white rounded-xl shadow-md flex flex-col overflow-hidden">
@@ -244,7 +244,7 @@ export default function TechnicalSupport() {
 
       {/* Service Tools & Features */}
       <section className="py-12 w-full">
-        <h2 className="text-center text-2xl font-extrabold mb-10 text-gray-900">Service Tools & Features</h2>
+        <h2 className="text-center text-2xl font-extrabold underline underline-offset-8 mb-10 text-white">Service Tools & Features</h2>
         <div className="flex flex-wrap justify-center gap-8 mb-8">
           <div className="bg-green-50 rounded-2xl shadow-md p-8 min-w-[320px] max-w-md flex-1 flex flex-col items-start">
             <div className="flex items-center text-green-700 font-bold text-lg mb-4 gap-2"><FiBookOpen /> Track Service Status</div>
@@ -255,8 +255,8 @@ export default function TechnicalSupport() {
       </section>
 
       {/* Knowledge Base Articles */}
-      <section className="py-12 w-full bg-gray-50">
-        <h3 className="text-center text-xl font-extrabold mb-10 text-gray-900">Knowledge Base Articles</h3>
+      <section className="py-12 w-full">
+        <h3 className="text-center text-xl font-extrabold underline underline-offset-8  mb-10 text-white">Knowledge Base Articles</h3>
         <div className="flex flex-wrap justify-center gap-8 mb-8">
           <div className="min-w-[260px] max-w-xs flex-1">
             <div className="bg-gray-100 rounded-xl shadow p-6 mb-6">
@@ -282,9 +282,9 @@ export default function TechnicalSupport() {
       </section>
 
       {/* Help Footer */}
-      <footer className="bg-white text-center py-12 mt-12">
-        <h3 className="text-2xl font-extrabold mb-2 text-gray-900">Still Need Help?</h3>
-        <p className="text-lg text-gray-700 mb-6">Our support team is here to assist you 24/7</p>
+      <footer className="text-center py-12 mt-12">
+        <h3 className="text-2xl font-extrabold underline underline-offset-8  mb-2 text-white">Still Need Help?</h3>
+        <p className="text-lg text-white mb-6">Our support team is here to assist you 24/7</p>
         <div className="flex justify-center gap-4">
           <button className="bg-white border border-sky-600 text-sky-600 font-bold py-3 px-8 rounded-md hover:bg-sky-50 transition">Contact Support</button>
           <button className="bg-sky-600 text-white font-bold py-3 px-8 rounded-md hover:bg-sky-700 transition">Schedule Callback</button>
@@ -295,7 +295,7 @@ export default function TechnicalSupport() {
       <button aria-label="Chat with support" className="fixed right-8 bottom-8 z-50 bg-sky-600 text-white rounded-full w-16 h-16 flex items-center justify-center text-3xl shadow-lg hover:bg-sky-700 transition">
         <FiMessageCircle />
       </button>
-      <Footer />
+      
     </main>
   );
 }

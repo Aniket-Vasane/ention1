@@ -20,7 +20,6 @@ import {
   Comments,
   SideCategories,
 } from "../../../components";
-import { getPostDetails } from "../../../services";
 
 const PostDetails = ({ post }) => {
   const router = useRouter();
@@ -100,7 +99,17 @@ const PostDetails = ({ post }) => {
 };
 export default PostDetails;
 
+// Switched to SSR: getServerSideProps is used instead of getStaticProps so that getStaticPaths is not required.
+// If you want to use SSG in the future, restore getStaticProps and getStaticPaths, and ensure your API endpoint is available.
+// export async function getStaticPaths() {
+//   const { getPosts } = await import('../../../services');
+//   const posts = await getPosts();
+//   const paths = posts.map((post) => ({ params: { slug: post.slug } }));
+//   return { paths, fallback: false };
+// }
+
 export async function getServerSideProps({ params }) {
+  const { getPostDetails } = await import('../../../services');
   const data = await getPostDetails(params.slug);
   if (!data) {
     return {

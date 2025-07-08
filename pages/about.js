@@ -1,53 +1,49 @@
 import React from "react";
-import Header from "components/layout/header";
-import { Navbar, Footer } from "components";
 import Image from "next/image";
 import Link from "next/link";
+import dynamic from "next/dynamic";
 
 // Import images
 import storyImage from "assets/0N1A1389.png";
 import peopleImage from "assets/market-pc.png";
 import productImage from "assets/Ention-Laptop-E3-Catalogue-design-2.png";
-import consultancyImage from "assets/serviceimg.png";
 import ellipseBg from "assets/ellipse-gradient-half.png";
+import consultancyImage from "assets/serviceimg.png";
+
+const AboutHeroCarousel = dynamic(() => import("components/generic/AboutHeroCarousel"), {
+  loading: () => <div className="w-full text-center py-8">Loading...</div>,
+  ssr: false,
+});
 
 const About = () => {
   return (
-    <main className="min-h-screen  relative overflow-hidden">
-      <Header />
-       {/*} <Image
+    <main className=" min-h-screen  relative overflow-hidden">
+      {/* Hero Section */}
+      <div className="bg-gradient-to-b from-[#070D2A] via-[#133B5C] to-[#0FAFCA] pt-32 pb-20 text-center text-white relative z-10 ">
+        <Image
           src={ellipseBg}
           alt="Background Decoration"
           className="absolute top-0 left-1/2 -translate-x-1/2 z-0 w-[500px] h-auto pointer-events-none"
-        /> */}
-
-      {/* Hero Section */}
-      <div className="pt-32 pb-20 text-center text-white relative z-10 bg-gradient-to-b from-[#070D2A] via-[#133B5C] to-[#0FAFCA]">
+        /> 
+        <AboutHeroCarousel />
         <div className="max-w-7xl mx-auto px-4 relative z-10">
-          <h1 className="text-4xl md:text-5xl font-bold leading-tight mb-6 uppercase">
-            Ention Is Not a Brand.<br />
-            <span className="opacity-0 animate-fadeIn">It's Your Working Companion.</span>
-          </h1>
-          <p className="text-lg md:text-xl max-w-4xl mx-auto mt-12">
-            The name Ention is more than a label; it's a philosophy. Inspired by the humble phrase "mention not", 
-            Ention was thoughtfully crafted to represent our core values, each letter in Ention represents a value we live and build by:
-            <b> Empowering Nations through Technology, Innovation, Opportunity, and New Ideas.</b>
-          </p>
+         
+          </div>
         </div>
-      </div>
+      
+
 
       {/* Video Section */}
       <div className="bg-[#0FAFCA] py-20">
         <div className="max-w-7xl mx-auto px-4">
-          <div className="relative w-full aspect-video">
-            <iframe
-              src="https://www.youtube.com/embed/wdNiEeuIEr0?autoplay=1&loop=1&playlist=wdNiEeuIEr0&controls=0&mute=1"
-              title="YouTube video player"
-              className="absolute top-0 left-0 w-full h-full"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-              referrerPolicy="strict-origin-when-cross-origin"
-              allowFullScreen
-            ></iframe>
+          <div className="relative w-full  h-full flex justify-center">
+            <video
+              src="/assets/E1_video.mp4"
+              controls
+              loading="lazy"
+              poster="/assets/about-video-poster.jpg"
+              className="w-full max-w-6xl rounded-lg shadow-lg"
+            ></video>
           </div>
         </div>
       </div>
@@ -60,7 +56,7 @@ const About = () => {
           </h2>
           <div className="flex flex-col md:flex-row gap-10 items-center mb-20">
             <div className="w-full md:w-1/2">
-              <div className="rounded-lg overflow-hidden aspect-[4/5]">
+              <div className="rounded-lg overflow-hidden]">
                 <Image
                   src={storyImage}
                   alt="Story"
@@ -109,7 +105,7 @@ const About = () => {
       </div>
 
       {/* What We Offer Section */}
-      <div className="bg-[#0FAFCA] py-20 text-white">
+      <div className= "bg-gradient-to-b from-[#0FAFCA] via-[#133B5C] to-[#070D2A] py-20 text-white">
         <div className="max-w-7xl mx-auto px-4">
           <h2 className="text-3xl md:text-4xl font-bold text-center mb-16 uppercase underline underline-offset-8">
             What We Offer
@@ -176,8 +172,6 @@ const About = () => {
           </div>
         </div>
       </div>
-
-      <Footer />
     </main>
   );
 };

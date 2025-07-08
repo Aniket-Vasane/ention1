@@ -1,4 +1,6 @@
 /** @type {import('tailwindcss').Config} */
+const plugin = require('tailwindcss/plugin');
+
 module.exports = {
   
   content: [
@@ -23,5 +25,8 @@ module.exports = {
   },
   plugins: [
     require('@tailwindcss/line-clamp'),
+    plugin(function({ addVariant }) {
+      addVariant('not-empty', '&:not(:placeholder-shown)');
+    }),
   ],
 }

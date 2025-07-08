@@ -17,19 +17,42 @@ import board from "assets/board.png";
 import warrantyimg from "assets/ds.png";
 import ProcessorCard from "components/ProcessorCard";
 import CheckIcon from "components/icons/check";
-import Footer from "components/layout/footer";
-import Header from "components/layout/header";
-
 import SimpleSlider from "./slider";
 import { Zoom } from "react-awesome-reveal";
-import TestCarousel from "components/TestCarousel";
 import { TypingEffect } from "components/generic/TypingEffect";
 import { BlurInText } from "components/generic/BlurInText";
 import { FadeUpAnimate } from "components/generic/FadeUpAnimate";
 import { useRouter } from "next/router";
 import IntelCarousel from "components/IntelCarousel";
+import dynamic from 'next/dynamic';
+import { motion } from "framer-motion";
+import Image from "next/image";
+import { FiSettings, FiDollarSign, FiShield, FiZap } from 'react-icons/fi';
+import { BsFlag } from 'react-icons/bs';
 
 const IMAGES = [marketpc, marketpc, marketpc];
+
+const TestCarousel = dynamic(() => import('components/TestCarousel'), { ssr: false });
+
+// FloatingBlob component for floating/parallax effect
+const FloatingBlob = ({ className = '', style = {}, children }) => (
+  <motion.div
+    className={className}
+    style={style}
+    animate={{
+      y: [0, -20, 0, 20, 0],
+      x: [0, 10, 0, -10, 0],
+      rotate: [0, 2, 0, -2, 0],
+    }}
+    transition={{
+      duration: 10,
+      repeat: Infinity,
+      ease: "easeInOut",
+    }}
+  >
+    {children}
+  </motion.div>
+);
 
 export default function Home() {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
@@ -77,7 +100,6 @@ export default function Home() {
 
   return (
     <>
-      <Header />
       <main className={"main overflow-x-hidden relative z-0 w-full"}>
         <div
           className=" flex flex-col -z-10"
@@ -87,8 +109,56 @@ export default function Home() {
           }}
         >
           <div className="h-[130px]"></div>
+          {/* Offers Bar Start */}
+          <div className="w-full flex justify-center">
+            <div className="w-[100%] bg-[#007E9E] text-white py-2 rounded-ls shadow-lg overflow-hidden relative z-40">
+              <div className="whitespace-nowrap overflow-hidden w-full">
+                <div className="animate-marquee flex items-center gap-12 text-lg font-semibold">
+                  <span> Summer Sale: Up to 20% off on select laptops!</span>
+                  <span> Free shipping on orders above ₹50,000</span>
+                  <span> Buy 1 Get 1 Free on Accessories</span>
+                  <span> No Cost EMI Available</span>
+                  <span> 2 Years Extended Warranty on E3 Series</span>
+                  {/* Duplicate for seamless infinite scroll */}
+                  <span> Summer Sale: Up to 20% off on select laptops!</span>
+                  <span> Free shipping on orders above ₹50,000</span>
+                  <span> Buy 1 Get 1 Free on Accessories</span>
+                  <span> No Cost EMI Available</span>
+                  <span> 2 Years Extended Warranty on E3 Series</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="h-[20px]"></div>
+          <style jsx global>{`
+            @keyframes marquee {
+              0% { transform: translateX(0%); }
+              100% { transform: translateX(-50%); }
+            }
+            .animate-marquee {
+              display: inline-flex;
+              min-width: 200%;
+              animation: marquee 25s linear infinite;
+            }
+          `}</style>
+          {/* Offers Bar End */}
+          <div className="h-[50px]"></div>
           <div className="flex flex-col w-full items-center">
-            <div style={{ letterSpacing: "7px" }} className="flex items-center">
+            {/* Mobile: INTRODUCING + TypingEffect in one line, ENTION® COMPUTING DEVICE with TypingEffect in next line */}
+            <div className="w-full flex-col items-center justify-center md:hidden">
+              <div
+                className="flex items-center justify-center w-full whitespace-nowrap overflow-x-auto"
+                style={{ letterSpacing: "7px" }}
+              >
+                <span className="text-white text-base md:text-lg font-semibold mr-2">INTRODUCING</span>
+                <TypingEffect className="text-[#01E9FE] font-bold text-base md:text-lg" text="MADE IN INDIA" />
+              </div>
+              <div className="flex items-center justify-center w-full mt-3 whitespace-nowrap overflow-x-auto">
+                <TypingEffect className="text-white text-lg md:text-xl font-bold" text={"ENTION\u00A0\u00AE COMPUTING DEVICE"} />
+              </div>
+            </div>
+            {/* Desktop: keep existing layout */}
+            <div style={{ letterSpacing: "7px" }} className="hidden md:flex items-center">
               <div className="text-white text-2xl mr-4">INTRODUCING</div>
               <div>
                 <TypingEffect
@@ -97,7 +167,7 @@ export default function Home() {
                 />
               </div>
             </div>
-            <BlurInText className="text-white text-[50px] mt-8 text-3xl font-bold">
+            <BlurInText className="hidden md:block text-white text-[50px] mt-8 text-3xl font-bold">
               <span>ENTION</span>
               <span
                 style={{ position: "relative", top: "-18px", fontSize: "31px" }}
@@ -114,6 +184,74 @@ export default function Home() {
               <IntelCarousel />
             </div>
           </div>
+          <div className="w-full flex justify-center mt-24">
+            <BlurInText>
+              <p className="text-white text-2xl md:text-4xl lg:text-[32px] font-bold text-center max-w-4xl leading-snug">
+                Get ready to experience a mesmerizing journey of performance and style with the Ention Workbook series<br />
+                <span className="text-[#01E9FE] font-bold">proudly Made in India to empower.</span>
+              </p>
+            </BlurInText>
+          </div>
+
+          {/* For You Section */}
+          <div className="w-full flex flex-col items-center mt-24">
+            <h2 className="text-white text-3xl md:text-4xl font-extrabold mb-12 text-center">
+              Find Your Perfect Device
+            </h2>
+            <div className="flex flex-col md:flex-row gap-8 w-full justify-center">
+              {/* Card 1: For Students */}
+              <div className="bg-[#1A2233] flex flex-col justify-between w-full max-w-xl p-4 shadow-lg border border-[#2d3748] py-8">
+                <div className="text-white text-xl font-bold mb-2 text-left">For Students</div>
+                <div className="flex flex-row gap-4 items-center flex-1">
+                  <img src="/assets/0N1A1389.png" alt="For Students" className="w-52 h-48 object-contain" />
+                  <div className="text-white text-xl text-left opacity-90 flex-1">Affordable, Lightweight, durable, and built to support your learning on the go.</div>
+                </div>
+                <button className="bg-[#01E9FE] hover:bg-[#00bcd4] text-black font-semibold py-1 px-4 rounded transition-all duration-300 text-sm w-fit mt-4 self-start">
+                  Shop Now →
+                </button>
+              </div>
+              {/* Card 2: For Professionals & Techies */}
+              <div className="bg-[#1A2233] flex flex-col items-center w-full max-w-sm p-4 shadow-lg border border-[#2d3748]">
+                <div className="text-white text-xl font-bold mb-2 text-center">For Professionals & Techies</div>
+                <img src="/assets/0N1A1389.png" alt="For Professionals & Techies" className="w-52 h-48 object-contain mb-3" />
+                <div className="text-white text-lg mb-3 text-center opacity-90">Customizable, seamlessly switch from work tasks to meetings with reliable performance. A powerful and customizable machine ready to take on your code, design, or research.</div>
+                <button className="w-full bg-[#01E9FE] hover:bg-[#00bcd4] text-black font-semibold py-1 rounded transition-all duration-300 text-sm">
+                  Shop Now →
+                </button>
+              </div>
+            </div>
+          </div>
+
+          {/* Why Choose Ention Workbook Series Section */}
+          <div className="w-full flex flex-col items-center mt-16 py-12">
+            <div className="w-full max-w-6xl px-4">
+              <h2 className="text-white text-3xl md:text-4xl font-extrabold mb-2 text-center">Why Choose Ention Workbook Series?</h2>
+              <p className="text-white text-lg opacity-80 mb-8 text-center">From customization to performance, discover what makes Ention Workbook Series the right choice for you.</p>
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+                <div className="bg-white/10 rounded-lg flex flex-col items-center justify-center p-6 min-h-[140px] border border-[#01E9FE]">
+                  <FiSettings className="text-cyan-400 mb-3" size={36} />
+                  <span className="text-white text-base font-semibold text-center">Customizable</span>
+                </div>
+                <div className="bg-white/10 rounded-lg flex flex-col items-center justify-center p-6 min-h-[140px] border border-[#01E9FE]">
+                  <FiDollarSign className="text-cyan-400 mb-3" size={36} />
+                  <span className="text-white text-base font-semibold text-center">Affordable Without Compromise</span>
+                </div>
+                <div className="bg-white/10 rounded-lg flex flex-col items-center justify-center p-6 min-h-[140px] border border-[#01E9FE]">
+                  <FiShield className="text-cyan-400 mb-3" size={36} />
+                  <span className="text-white text-base font-semibold text-center">18-Month On-Site Warranty</span>
+                </div>
+                <div className="bg-white/10 rounded-lg flex flex-col items-center justify-center p-6 min-h-[140px] border border-[#01E9FE]">
+                  <BsFlag className="text-cyan-400 mb-3" size={36} />
+                  <span className="text-white text-base font-semibold text-center">Made in India. Made for You.</span>
+                </div>
+                <div className="bg-white/10 rounded-lg flex flex-col items-center justify-center p-6 min-h-[140px] border border-[#01E9FE]">
+                  <FiZap className="text-cyan-400 mb-3" size={36} />
+                  <span className="text-white text-base font-semibold text-center">Performance That Powers You</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
           <FadeUpAnimate spaceToMove={50}>
             <div className="w-full flex  justify-center mt-32">
               <button
@@ -125,70 +263,72 @@ export default function Home() {
             </div>
           </FadeUpAnimate>
 
-          {/* CPU Cards  */}
-          <div className="w-full flex justify-center">
-            <div className="flex flex-col items-center w-full mt-16">
-              <FadeUpAnimate spaceToMove={50} duration={1}>
-                <div className="flex flex-col items-center">
-                  <p className="text-white text-2xl md:text-4xl lg:text-[56px] font-bold md:whitespace-nowrap text-center">
-                    High Performance Power house
-                  </p>
-                  <p className="text-white text-xl md:text-2xl lg:text-4xl mt-4 lg:mt-8 md:whitespace-nowrap text-center">
-                    Ention
-                    <span
-                      className="font-thin"
-                      style={{
-                        position: "relative",
-                        top: "-5px",
-                        fontSize: "25px",
-                      }}
-                    >
-                      &reg;
-                    </span>{" "}
-                    Laptop equipped with latest generation Processor
-                  </p>
-                </div>
-              </FadeUpAnimate>
-              <div className="w-[80%] sm:w-full h-full lg:mt-5 relative z-[0]">
-                <div
-                  className="w-full h-full absolute opacity-10"
-                  style={{
-                    backgroundImage: `url(${board.src})`,
-                    backgroundSize: "35%",
-                  }}
-                ></div>
+          {/*
+            CPU Cards Section (High Performance Power house with Intel/AMD cards) commented out for future use
+            <div className="w-full flex justify-center">
+              <div className="flex flex-col items-center w-full mt-16">
+                <FadeUpAnimate spaceToMove={50} duration={1}>
+                  <div className="flex flex-col items-center">
+                    <p className="text-white text-2xl md:text-4xl lg:text-[56px] font-bold md:whitespace-nowrap text-center">
+                      High Performance Power house
+                    </p>
+                    <p className="text-white text-xl md:text-2xl lg:text-4xl mt-4 lg:mt-8 md:whitespace-nowrap text-center">
+                      Ention
+                      <span
+                        className="font-thin"
+                        style={{
+                          position: "relative",
+                          top: "-5px",
+                          fontSize: "25px",
+                        }}
+                      >
+                        &reg;
+                      </span>{" "}
+                      Laptop equipped with latest generation Processor
+                    </p>
+                  </div>
+                </FadeUpAnimate>
+                <div className="w-[80%] sm:w-full h-full lg:mt-5 relative z-[0]">
+                  <div
+                    className="w-full h-full absolute opacity-10"
+                    style={{
+                      backgroundImage: `url(${board.src})`,
+                      backgroundSize: "35%",
+                    }}
+                  ></div>
 
-                <div className="mt-16 w-full h-full md:h-[700px] flex md:flex-row flex-col items-center md:items-start justify-center gap-6 md:gap-10 lg:gap-20 relative z-[1]">
-                  <FadeUpAnimate spaceToMove={200}>
-                    <ProcessorCard
-                      img={intelprocessor}
-                      title={
-                        <>
-                          <b>Intel</b> Family Processor
-                        </>
-                      }
-                      content={
-                        "The lineup of Core processors includes the Intel Core i3, Intel Core i5, Intel Core i7, and Intel Core i9, along with the X-series of Intel Core CPUs."
-                      }
-                    />
-                  </FadeUpAnimate>
-                  <FadeUpAnimate spaceToMove={400} duration={0.7}>
-                    <ProcessorCard
-                      img={amdprocessor}
-                      title={
-                        <>
-                          <b>AMD</b> Series Processor
-                        </>
-                      }
-                      content={
-                        "The lineup of Core processors includes the Intel Core i3, Intel Core i5, Intel Core i7, and Intel Core i9, along with the X-series of Intel Core CPUs."
-                      }
-                    />
-                  </FadeUpAnimate>
+                  <div className="mt-16 w-full h-full md:h-[700px] flex md:flex-row flex-col items-center md:items-start justify-center gap-6 md:gap-10 lg:gap-20 relative z-[1]">
+                    <FadeUpAnimate spaceToMove={200}>
+                      <ProcessorCard
+                        img={intelprocessor}
+                        title={
+                          <>
+                            <b>Intel</b> Family Processor
+                          </>
+                        }
+                        content={
+                          "The lineup of Core processors includes the Intel Core i3, Intel Core i5, Intel Core i7, and Intel Core i9, along with the X-series of Intel Core CPUs."
+                        }
+                      />
+                    </FadeUpAnimate>
+                    <FadeUpAnimate spaceToMove={400} duration={0.7}>
+                      <ProcessorCard
+                        img={amdprocessor}
+                        title={
+                          <>
+                            <b>AMD</b> Series Processor
+                          </>
+                        }
+                        content={
+                          "The lineup of Core processors includes the Intel Core i3, Intel Core i5, Intel Core i7, and Intel Core i9, along with the X-series of Intel Core CPUs."
+                        }
+                      />
+                    </FadeUpAnimate>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
+          */}
         </div>
         <div
           className=" flex flex-col -z-10"
@@ -205,31 +345,18 @@ export default function Home() {
                   className="px-8 py-4 border rounded-3xl w-full flex flex-col sm:flex-row justify-center items-center relative"
                   style={{ borderColor: "rgba(34, 209, 238, 1" }}
                 >
-                  <img
-                    src={warrantyimg.src}
-                    alt="warranty-img"
-                    className="w-[320px] sm:w-[240px] md:w-[280px] lg:w-[320px] xl:w-[390px] h-auto z-[2]"
-                  />
-                  <div
+                  <Image src={warrantyimg} alt="warranty-img" width={390} height={240} className="w-[320px] sm:w-[240px] md:w-[280px] lg:w-[320px] xl:w-[390px] h-auto z-[2]" />
+                  <FloatingBlob
                     className="absolute z-[1] top-10 sm:top-[150px] left-16 w-[80px] h-[80px] sm:w-[120px] sm:h-[120px] lg:w-[140px] lg:h-[140px]"
-                    style={{
-                      backgroundImage: `url(${ellipsemd.src})`,
-                      backgroundSize: "100% 100%",
-                    }}
+                    style={{ backgroundImage: `url(${ellipsemd.src})`, backgroundSize: "100% 100%" }}
                   />
-                  <div
+                  <FloatingBlob
                     className="absolute z-[1] top-10 sm:top-[100px] left-[38%] xl:left-[42%] w-[20px] h-[20px] lg:w-[30px] lg:h-[30px]"
-                    style={{
-                      backgroundImage: `url(${ellipsemd.src})`,
-                      backgroundSize: "100% 100%",
-                    }}
+                    style={{ backgroundImage: `url(${ellipsemd.src})`, backgroundSize: "100% 100%" }}
                   />
-                  <div
+                  <FloatingBlob
                     className="absolute z-[1] bottom-4 xl:bottom-10 right-12 xl:right-16 w-[60px] h-[60px] sm:w-[60px] sm:h-[60px] lg:w-[80px] lg:h-[80px] xl:w-[100px] xl:h-[100px]"
-                    style={{
-                      backgroundImage: `url(${ellipsemd.src})`,
-                      backgroundSize: "100% 100%",
-                    }}
+                    style={{ backgroundImage: `url(${ellipsemd.src})`, backgroundSize: "100% 100%" }}
                   />
                   <div className="w-10"></div>
                   <div className="flex flex-col items-center sm:items-start gap-8 lg:gap-16 w-full min-[540px]:w-[360px] text-center sm:text-left sm:w-[320px] lg:w-[360px] xl:w-[480px] ">
@@ -240,6 +367,7 @@ export default function Home() {
                     <button
                       className="z-[2] w-[200px] h-[45px] sm:w-[180px] md:w-[200px] sm:h-[38px] md:h-[42px] xl:w-[248px] xl:h-[58px] rounded-3xl flex justify-center items-center text-black text-lg md:text-xl xl:text-2xl hover:scale-105  transition-all duration-300 ease-in-out"
                       style={{ backgroundColor: "rgba(34, 209, 238, 1)" }}
+                      onClick={() => router.push('/technical-support')}
                     >
                       Know More
                     </button>
@@ -260,13 +388,24 @@ export default function Home() {
             </div>
           </Zoom>
           {/* Workbook series  */}
-          <div className="w-full flex flex-col items-center">
-            <div className="flex flex-col md:flex-row justify-center items-start md:items-center gap-6 md:gap-12 lg:gap-24 w-[80%] md:w-full mt-16 min-[876px]:mt-24 xl:mt-32">
-              <img
-                src={marketpc.src}
-                alt="discussing-image"
-                className="w-full md:w-[360px] lg:w-[480px] min-[1240px]:w-[540px] xl:w-[640px]"
-              />
+          <div className="w-full flex flex-col items-center relative">
+            <motion.h2
+              className="font-extrabold text-white text-4xl md:text-6xl text-center mb-8 mt-40 drop-shadow-lg"
+              initial={{ opacity: 0, y: 40 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 1, delay: 0.2 }}
+              viewport={{ once: true }}
+            >
+              Classroom to Boardroom
+            </motion.h2>
+            {/* Floating blobs in whitespace */}
+            <FloatingBlob className="hidden md:block absolute left-0 top-10 w-40 h-40 opacity-40 z-0" style={{ backgroundImage: `url(${ellipsemd.src})`, backgroundSize: "100% 100%" }} />
+            <FloatingBlob className="hidden md:block absolute right-10 bottom-0 w-32 h-32 opacity-30 z-0" style={{ backgroundImage: `url(${ellipsemd.src})`, backgroundSize: "100% 100%" }} />
+            <FloatingBlob className="hidden md:block absolute left-1/3 top-1/2 w-24 h-24 opacity-20 z-0" style={{ backgroundImage: `url(${ellipsemd.src})`, backgroundSize: "100% 100%" }} />
+            <div className="flex flex-col md:flex-row justify-center items-start md:items-center gap-6 md:gap-12 lg:gap-24 w-[80%] md:w-full mt-8 min-[876px]:mt-24 xl:mt-32 relative z-10">
+              <motion.div initial={{ opacity: 0, x: 100 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 1 }} className="w-full md:w-[360px] lg:w-[480px] min-[1240px]:w-[540px] xl:w-[640px]">
+                <Image src={marketpc} alt="discussing-image" width={640} height={480} className="w-full h-auto" />
+              </motion.div>
               <FadeUpAnimate spaceToMove={300}>
                 <div className="flex flex-col gap-4 sm:gap-8 md:gap-4 lg:gap-6 xl:gap-10">
                   <p className="text-[28px] min-[540px]:text-[36px]  md:text-xl lg:text-[24px] xl:text-3xl text-white font-bold">
@@ -288,38 +427,31 @@ export default function Home() {
                     </li>
                   </div>
                   <div className="flex gap-5 mt-5">
-                    <img
-                      src={corei5.src}
-                      alt="cpu-image"
-                      className="w-12 min-[450px]:w-16 sm:w-20 md:w-16 lg:w-20 h-auto"
-                    />
-                    <img
-                      src={corei7.src}
-                      alt="cpu-image"
-                      className="w-12 min-[450px]:w-16 sm:w-20 md:w-16 lg:w-20 h-auto"
-                    />
-                    <img
-                      src={amd5.src}
-                      alt="cpu-image"
-                      className="w-12 min-[450px]:w-16 sm:w-20 md:w-16 lg:w-20 h-auto"
-                    />
-                    <img
-                      src={amd7.src}
-                      alt="cpu-image"
-                      className="w-12 min-[450px]:w-16 sm:w-20 md:w-16 lg:w-20 h-auto"
-                    />
+                    <Image src={corei5} alt="cpu-image" width={80} height={80} className="w-12 min-[450px]:w-16 sm:w-20 md:w-16 lg:w-20 h-auto" />
+                    <Image src={corei7} alt="cpu-image" width={80} height={80} className="w-12 min-[450px]:w-16 sm:w-20 md:w-16 lg:w-20 h-auto" />
+                    <Image src={amd5} alt="cpu-image" width={80} height={80} className="w-12 min-[450px]:w-16 sm:w-20 md:w-16 lg:w-20 h-auto" />
+                    <Image src={amd7} alt="cpu-image" width={80} height={80} className="w-12 min-[450px]:w-16 sm:w-20 md:w-16 lg:w-20 h-auto" />
                   </div>
-                  <button className="bg-white mt-4 xl:mt-8 z-[2] w-[160px] h-[36px] min-[450px]:w-[200px] min-[450px]:h-[45px] sm:w-[Cpx] md:w-[200px] sm:h-[38px] md:h-[42px] xl:w-[248px] xl:h-[58px] rounded-3xl flex justify-center items-center text-black text-base min-[450px]:text-lg md:text-xl xl:text-2xl hover:scale-105  transition-all duration-300 ease-in-out">
+                  <button
+                    className="bg-white mt-4 xl:mt-8 z-[2] w-[160px] h-[36px] min-[450px]:w-[200px] min-[450px]:h-[45px] sm:w-[Cpx] md:w-[200px] sm:h-[38px] md:h-[42px] xl:w-[248px] xl:h-[58px] rounded-3xl flex justify-center items-center text-black text-base min-[450px]:text-lg md:text-xl xl:text-2xl hover:scale-105  transition-all duration-300 ease-in-out"
+                    onClick={() => router.push('/product')}
+                  >
                     Explore More
                   </button>
                 </div>
               </FadeUpAnimate>
             </div>
             <div className="flex flex-col md:flex-row-reverse justify-center items-start md:items-center gap-6 md:gap-12 lg:gap-24 w-[80%] md:w-full mt-16 min-[876px]:mt-24 xl:mt-32">
-              <div
-                style={{ backgroundImage: `url(${marketpc.src})` }}
-                className="h-[425px] bg-no-repeat bg-center bg-cover w-full md:w-[360px] lg:w-[480px] min-[1240px]:w-[540px] xl:w-[640px]"
-              ></div>
+              <div className="relative h-[425px] w-full md:w-[360px] lg:w-[480px] min-[1240px]:w-[540px] xl:w-[640px] flex items-center justify-center">
+                {/* Blurred/partial laptop image */}
+                <Image src={marketpc} alt="swapbook-coming-soon" width={640} height={200} className="w-full h-[200px] object-cover rounded-lg md:h-full md:rounded-lg blur-sm" style={{ objectPosition: 'right' }} />
+                {/* Overlay text */}
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <span className="font-extrabold text-white text-4xl md:text-5xl lg:text-6xl text-center drop-shadow-lg">
+                    Coming Soon.
+                  </span>
+                </div>
+              </div>
               <FadeUpAnimate>
                 <div className="flex flex-col gap-4 sm:gap-8 md:gap-4 lg:gap-6 xl:gap-10">
                   <p className="text-[28px] min-[540px]:text-[36px]  md:text-xl lg:text-[24px] xl:text-3xl text-white font-bold">
@@ -334,18 +466,13 @@ export default function Home() {
                     </li>
                   </div>
                   <div className="flex gap-5 mt-5">
-                    <img
-                      src={corei9.src}
-                      alt="cpu-image"
-                      className="w-12 min-[450px]:w-16 sm:w-20 md:w-16 lg:w-20 h-auto"
-                    />
-                    <img
-                      src={nvidia.src}
-                      alt="cpu-image"
-                      className="w-12 min-[450px]:w-16 sm:w-20 md:w-16 lg:w-20 h-auto"
-                    />
+                    <Image src={corei9} alt="cpu-image" width={80} height={80} className="w-12 min-[450px]:w-16 sm:w-20 md:w-16 lg:w-20 h-auto" />
+                    <Image src={nvidia} alt="cpu-image" width={80} height={80} className="w-12 min-[450px]:w-16 sm:w-20 md:w-16 lg:w-20 h-auto" />
                   </div>
-                  <button className="bg-white mt-4 xl:mt-8 z-[2] w-[160px] h-[36px] min-[450px]:w-[200px] min-[450px]:h-[45px] sm:w-[Cpx] md:w-[200px] sm:h-[38px] md:h-[42px] xl:w-[248px] xl:h-[58px] rounded-3xl flex justify-center items-center text-black text-base min-[450px]:text-lg md:text-xl xl:text-2xl hover:scale-105  transition-all duration-300 ease-in-out">
+                  <button
+                    className="bg-white mt-4 xl:mt-8 z-[2] w-[160px] h-[36px] min-[450px]:w-[200px] min-[450px]:h-[45px] sm:w-[Cpx] md:w-[200px] sm:h-[38px] md:h-[42px] xl:w-[248px] xl:h-[58px] rounded-3xl flex justify-center items-center text-black text-base min-[450px]:text-lg md:text-xl xl:text-2xl hover:scale-105  transition-all duration-300 ease-in-out"
+                    onClick={() => router.push('ecommerce/product')}
+                  >
                     Explore More
                   </button>
                 </div>
@@ -396,13 +523,17 @@ export default function Home() {
                 </div>
               </FadeUpAnimate>
 
-              <div
-                className="w-full min-[940px]:w-[560px] h-auto min-[940px]:h-[540px] xl:h-[620px]  bg-[length:90%]"
+              <motion.div
+                className="w-full min-[940px]:w-[560px] h-auto min-[940px]:h-[540px] xl:h-[620px] bg-[length:90%] mx-auto"
                 style={{
                   backgroundImage: `url(${lappy.src})`,
                   backgroundRepeat: "no-repeat",
                   backgroundPosition: "center",
                 }}
+                initial={{ opacity: 0, x: 100 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 1 }}
               >
                 {showBookNowForm && (
                   <BlurInText duration={0.3}>
@@ -503,11 +634,10 @@ export default function Home() {
                     </div>
                   </BlurInText>
                 )}
-              </div>
+              </motion.div>
             </div>
           </div>
         </div>
-        <Footer />
       </main>
     </>
   );
