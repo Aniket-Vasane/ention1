@@ -3,10 +3,14 @@ const sendEmail = require('../utils/mailer');
 const generateInvoice = require('../utils/invoiceGenerator');
 const path = require('path');
 
-// 📦 Create a new order and send confirmation email with invoice
+// ✅ Create a new order and send confirmation email with invoice
 exports.createOrder = async (req, res) => {
   try {
     const { products, totalAmount } = req.body;
+
+    if (!products || products.length === 0) {
+      return res.status(400).json({ error: 'Product list cannot be empty.' });
+    }
 
     const newOrder = await Order.create({
       user: req.user.id,
@@ -15,15 +19,15 @@ exports.createOrder = async (req, res) => {
       status: 'Pending',
     });
 
-    if (!req.user || !req.user.email || !req.user.name) {
+    const userEmail = req?.user?.email;
+    const userName = req?.user?.name;
+
+    if (!userEmail || !userName) {
       return res.status(400).json({ error: "User info missing for sending email." });
     }
 
-    const userEmail = req.user.email;
-    const userName = req.user.name;
-
     const productListHtml = products
-      .map(p => `<li>${p.name} - ₹${p.price} x ${p.quantity}</li>`)
+      .map(p => `<li>${p.name || 'Unnamed Product'} - ₹${p.price || 0} x ${p.quantity || 1}</li>`)
       .join('');
 
     const orderTimestamp = new Date(newOrder.createdAt).toLocaleString();
@@ -73,17 +77,18 @@ exports.cancelOrder = async (req, res) => {
     order.status = 'Cancelled';
     await order.save();
 
-    if (!req.user || !req.user.email || !req.user.name) {
+    const userEmail = req?.user?.email;
+    const userName = req?.user?.name;
+
+    if (!userEmail || !userName) {
       return res.status(400).json({ error: "User info missing for sending email." });
     }
 
-    const userEmail = req.user.email;
-    const userName = req.user.name;
-
     const productListHtml = order.products
       .map(p => {
-        const name = p.name || p.product?.name || 'Product';
-        const price = p.price || p.product?.price || 0;
+        const product = p.product || {};
+        const name = p.name || product.name || 'Unnamed Product';
+        const price = p.price || product.price || 0;
         const qty = p.quantity || 1;
         return `<li>${name} - ₹${price} x ${qty}</li>`;
       })
@@ -119,3 +124,44 @@ exports.cancelOrder = async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 };
+
+// ✅ Get all orders (admin only)
+exports.getAllOrders = async (req, res) => {
+  try {
+    const orders = await Order.find().populate('user', 'name email');
+    res.json(orders);
+  } catch (err) {
+    console.error('Get all orders error:', err.message);
+    res.status(500).json({ error: err.message });
+  }
+};
+
+// ✅ Get current user's orders
+exports.getUserOrders = async (req, res) => {
+  try {
+    const orders = await Order.find({ user: req.user.id });
+    res.json(orders);
+  } catch (err) {
+    console.error('Get user orders error:', err.message);
+    res.status(500).json({ error: err.message });
+  }
+};
+
+exports.updateOrderStatus = async (req, res) => {
+  try {
+    const order = await Order.findById(req.params.id);
+    if (!order) return res.status(404).json({ error: 'Order not found' });
+
+    const { status } = req.body;
+    if (!status) return res.status(400).json({ error: 'Status is required' });
+
+    order.status = status;
+    await order.save();
+
+    res.json({ message: 'Order status updated', order });
+  } catch (err) {
+    console.error('Update order status error:', err.message);
+    res.status(500).json({ error: err.message });
+  }
+};
+

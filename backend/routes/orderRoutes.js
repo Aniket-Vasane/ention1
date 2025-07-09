@@ -4,24 +4,25 @@ const {
   createOrder,
   getUserOrders,
   getAllOrders,
-  updateOrderStatus,
-  cancelOrder
+  cancelOrder,
+  updateOrderStatus // ✅ added below
 } = require('../controllers/orderController');
-const { protect, isAdmin } = require('../middleware/authMiddleware');
+
+const { protect, isAdmin } = require('../middlewares/authMiddleware'); // ✅ FIXED path
 
 // ✅ Create a new order
-router.post('/', protect, createOrder); // POST /api/orders/
+router.post('/', protect, createOrder);
 
 // ✅ Get all orders (admin only)
-router.get('/', protect, isAdmin, getAllOrders); // GET /api/orders/
+router.get('/', protect, isAdmin, getAllOrders);
 
 // ✅ Get logged-in user's orders
-router.get('/myorders', protect, getUserOrders); // GET /api/orders/myorders
+router.get('/myorders', protect, getUserOrders);
 
 // ✅ Update order status (admin)
-router.put('/:id', protect, isAdmin, updateOrderStatus); // PUT /api/orders/:id
+router.put('/:id', protect, isAdmin, updateOrderStatus); // ⬅️ make sure this exists in controller!
 
 // ✅ Cancel order (user)
-router.delete('/:id/cancel', protect, cancelOrder); // DELETE /api/orders/:id/cancel
+router.delete('/:id/cancel', protect, cancelOrder);
 
 module.exports = router;
